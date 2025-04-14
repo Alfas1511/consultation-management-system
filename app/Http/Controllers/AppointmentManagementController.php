@@ -69,7 +69,8 @@ class AppointmentManagementController extends Controller
 
     public function getDoctorAvailabilityTimeSlots(Request $request)
     {
-        $doctor_availabilities = DoctorAvailability::where('doctor_id', $request->doctor_id)->where('date', $request->date)->get();
+        $doctor_availabilities = DoctorAvailability::where('doctor_id', $request->doctor_id)->where('date', $request->date)
+            ->where('is_available', 1)->get();
         return response()->json([
             'status' => true,
             'data' => $doctor_availabilities,
