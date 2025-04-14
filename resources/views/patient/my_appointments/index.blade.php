@@ -1,11 +1,11 @@
 @extends('layouts.mainapp')
-@section('title', 'My Appointments List')
+@section('title', 'Appointments List')
 @section('content')
     <div class="main-content app-content mt-0">
         <div class="side-app">
             <div class="main-container container-fluid">
                 <div class="page-header">
-                    <h1 class="page-title">My Appointments List</h1>
+                    <h1 class="page-title">Appointments List</h1>
                     <div class="prism-toggle px-2">
                         <a href="{{ route('appointment.create') }}"><button class="btn btn-primary">Create
                                 Appointment</button></a>
@@ -59,6 +59,7 @@
                                 <th width=7%>SI No</th>
                                 <th>Doctor Name</th>
                                 <th>Appointment Date</th>
+                                <th>Time Slot</th>
                                 <th>Status</th>
                                 <th width=13%>Action</th>
                             </thead>
@@ -101,6 +102,10 @@
                     {
                         data: 'appointment_date',
                         name: 'appointment_date',
+                    },
+                    {
+                        data: 'timeslot',
+                        name: 'timeslot',
                     },
                     {
                         data: 'status',

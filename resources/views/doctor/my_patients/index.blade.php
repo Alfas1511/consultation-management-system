@@ -1,11 +1,11 @@
 @extends('layouts.mainapp')
-@section('title', 'My Patients List')
+@section('title', 'Patients List')
 @section('content')
     <div class="main-content app-content mt-0">
         <div class="side-app">
             <div class="main-container container-fluid">
                 <div class="page-header">
-                    <h1 class="page-title">My Patients List</h1>
+                    <h1 class="page-title">Patients List</h1>
                 </div>
 
                 @if (Session::has('success'))
@@ -23,6 +23,7 @@
                                 <th width=7%>SI No</th>
                                 <th>Patient Name</th>
                                 <th>Appointment Date</th>
+                                <th>Time Slot</th>
                                 <th>Status</th>
                                 <th width=13%>Action</th>
                             </thead>
@@ -65,6 +66,10 @@
                     {
                         data: 'appointment_date',
                         name: 'appointment_date',
+                    },
+                    {
+                        data: 'timeslot',
+                        name: 'timeslot',
                     },
                     {
                         data: 'status',

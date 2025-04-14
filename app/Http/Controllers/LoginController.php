@@ -33,7 +33,6 @@ class LoginController extends Controller
                 return redirect()->route('patient.dashboard');
             }
 
-            // Fallback redirect
             return redirect()->route('loginPage');
         }
 

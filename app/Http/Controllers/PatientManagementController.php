@@ -17,11 +17,16 @@ class PatientManagementController extends Controller
     public function list(Request $request)
     {
         $authUser = auth()->user();
-        $datas = Appointment::where('doctor_id', $authUser->id);
+        $datas = Appointment::when($authUser->role->id == 2, function ($query) use ($authUser) {
+            $query->where('doctor_id', $authUser->id);
+        });
         return DataTables::of($datas)
             ->addIndexColumn()
             ->addColumn('patient_name', function ($data) {
                 return $data->getPatient->name ?? "--";
+            })
+            ->addColumn('timeslot', function ($data) {
+                return $data->getDoctorAvailability->start_time . "-" . $data->getDoctorAvailability->end_time ?? "--";
             })
             ->addColumn('actions', function ($data) {
                 if ($data->status == 'pending') {
@@ -30,7 +35,7 @@ class PatientManagementController extends Controller
                 }
                 return $btn = "";
             })
-            ->rawColumns(['patient_name', 'actions'])
+            ->rawColumns(['patient_name', 'actions', 'timeslot'])
             ->make(true);
     }
 

@@ -7,6 +7,15 @@
                 <div class="page-header">
                     <h1 class="page-title">Create Doctor Availability</h1>
                 </div>
+
+                @if (Session::has('success'))
+                    <p class="alert alert-success">{{ Session::get('success') }}</p>
+                @endif
+
+                @if (Session::has('error'))
+                    <p class="alert alert-danger">{{ Session::get('error') }}</p>
+                @endif
+                
                 <div class="card">
                     <div class="card-body">
                         <form action="{{ route('doctor.availability.store') }}" method="POST">

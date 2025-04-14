@@ -20,11 +20,16 @@ class AppointmentManagementController extends Controller
     public function list(Request $request)
     {
         $authUser = auth()->user();
-        $datas = Appointment::where('patient_id', $authUser->id);
+        $datas = Appointment::when($authUser->role->id == 3, function ($query) use ($authUser) {
+            $query->where('patient_id', $authUser->id);
+        });
         return DataTables::of($datas)
             ->addIndexColumn()
             ->addColumn('doctor_name', function ($data) {
                 return $data->getDoctor->name ?? "--";
+            })
+            ->addColumn('timeslot', function ($data) {
+                return $data->getDoctorAvailability->start_time . "-" . $data->getDoctorAvailability->end_time ?? "--";
             })
             ->addColumn('actions', function ($data) {
                 if ($data->status == 'pending') {
@@ -39,7 +44,7 @@ class AppointmentManagementController extends Controller
                 }
                 return $btn = '';
             })
-            ->rawColumns(['doctor_name', 'actions'])
+            ->rawColumns(['doctor_name', 'actions', 'timeslot'])
             ->make(true);
     }
 
@@ -53,7 +58,8 @@ class AppointmentManagementController extends Controller
     {
         $doctor_availabilities = DoctorAvailability::where('doctor_id', $request->doctor_id)
             ->where('is_available', 1)
-            ->distinct('date')
+            ->select('date')
+            ->distinct()
             ->get();
         return response()->json([
             'status' => true,

@@ -141,15 +141,15 @@
                 <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
                 <div class="app-sidebar">
                     <div class="side-header">
-                        <a class="header-brand1" href="index.html">
-                            <img src="../assets/images/brand/logo-white.png" class="header-brand-img desktop-logo"
-                                alt="logo">
-                            <img src="../assets/images/brand/icon-white.png" class="header-brand-img toggle-logo"
-                                alt="logo">
-                            <img src="../assets/images/brand/icon-dark.png" class="header-brand-img light-logo"
-                                alt="logo">
-                            <img src="../assets/images/brand/logo-dark.png" class="header-brand-img light-logo1"
-                                alt="logo">
+                        <a class="header-brand1" href="{{ route('admin.dashboard') }}">
+                            <img src="{{ asset('assets/images/brand/logo-white.png') }}"
+                                class="header-brand-img desktop-logo" alt="logo">
+                            <img src="{{ asset('assets/images/brand/icon-white.png') }}"
+                                class="header-brand-img toggle-logo" alt="logo">
+                            <img src="{{ asset('assets/images/brand/icon-dark.png') }}"
+                                class="header-brand-img light-logo" alt="logo">
+                            <img src="{{ asset('assets/images/brand/logo-dark.png') }}"
+                                class="header-brand-img light-logo1" alt="logo">
                         </a>
                         <!-- LOGO -->
                     </div>
@@ -182,8 +182,8 @@
                                 <li class="slide">
                                     <a class="side-menu__item has-link" data-bs-toggle="slide"
                                         href="{{ route('my_patients.index') }}"><i
-                                            class="side-menu__icon fe fe-home"></i><span class="side-menu__label">My
-                                            Patients</span></a>
+                                            class="side-menu__icon fe fe-home"></i><span
+                                            class="side-menu__label">Patients</span></a>
                                 </li>
                             @endif
 
@@ -191,7 +191,7 @@
                                 <li class="slide">
                                     <a class="side-menu__item has-link" data-bs-toggle="slide"
                                         href="{{ route('my_appointments.index') }}"><i
-                                            class="side-menu__icon fe fe-home"></i><span class="side-menu__label">My
+                                            class="side-menu__icon fe fe-home"></i><span class="side-menu__label">
                                             Appointments</span></a>
                                 </li>
                             @endif

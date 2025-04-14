@@ -7,15 +7,18 @@ use App\Http\Controllers\DoctorManagementController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientManagementController;
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('loginPage');
+Route::get('/registration', [RegistrationController::class, 'registrationPage'])->name('registrationPage');
+Route::post('/register', [RegistrationController::class, 'register'])->name('register');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Admin-only routes
-Route::middleware(['auth', 'role:Admin'])->prefix('/admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::middleware(['auth', 'role:Admin'])->group(function () {
+    Route::get('/admin-dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::prefix('/doctor-management')->group(function () {
         Route::get('doctors-list', [DoctorManagementController::class, 'list'])->name('doctor.list');
@@ -28,19 +31,19 @@ Route::middleware(['auth', 'role:Admin'])->prefix('/admin')->group(function () {
 });
 
 // Doctor-only routes
-Route::middleware(['auth', 'role:Doctor'])->prefix('/doctor')->group(function () {
-    Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
-    Route::get('/my-patients', [PatientManagementController::class, 'index'])->name('my_patients.index');
-    Route::get('/my-patients-list', [PatientManagementController::class, 'list'])->name('my_patients.list');
+Route::middleware(['auth', 'role:Doctor,Admin'])->group(function () {
+    Route::get('/doctor-dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
+    Route::get('/patients', [PatientManagementController::class, 'index'])->name('my_patients.index');
+    Route::get('/patients-list', [PatientManagementController::class, 'list'])->name('my_patients.list');
     Route::get('/update-status/{id}', [PatientManagementController::class, 'actionsPage'])->name('patient.updateActionPage');
     Route::post('/update-status-action', [PatientManagementController::class, 'updateStatus'])->name('patient.update_status');
 });
 
 // Patient-only routes
-Route::middleware(['auth', 'role:Patient'])->prefix('/patient')->group(function () {
-    Route::get('/dashboard', [PatientController::class, 'dashboard'])->name('patient.dashboard');
-    Route::get('/my-appointments', [AppointmentManagementController::class, 'index'])->name('my_appointments.index');
-    Route::get('/my-appointments-list', [AppointmentManagementController::class, 'list'])->name('my_appointments.list');
+Route::middleware(['auth', 'role:Patient,Admin'])->group(function () {
+    Route::get('/patient-dashboard', [PatientController::class, 'dashboard'])->name('patient.dashboard');
+    Route::get('/appointments', [AppointmentManagementController::class, 'index'])->name('my_appointments.index');
+    Route::get('/appointments-list', [AppointmentManagementController::class, 'list'])->name('my_appointments.list');
     Route::get('/create-appointment', [AppointmentManagementController::class, 'create'])->name('appointment.create');
     Route::post('/store-appointment', [AppointmentManagementController::class, 'store'])->name('appointment.store');
     Route::get('/getDoctorAvailabilityDates', [AppointmentManagementController::class, 'getDoctorAvailabilityDates'])->name('getDoctorAvailabilityDates');

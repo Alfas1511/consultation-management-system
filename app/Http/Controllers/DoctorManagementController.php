@@ -95,7 +95,7 @@ class DoctorManagementController extends Controller
             $user->password = Hash::make($data['password']);
             $user->save();
 
-            $doctor_department = DoctorDepartment::where('doctore_id', $user->id)->first();
+            $doctor_department = DoctorDepartment::where('doctor_id', $user->id)->first();
             $doctor_department->department_id = $data['department'];
             $doctor_department->save();
 
@@ -150,6 +150,15 @@ class DoctorManagementController extends Controller
             DB::beginTransaction();
             $data = $request->validated();
 
+            $existing_data = DoctorAvailability::where('doctor_id', $data['id'])
+                ->where('date', $data['date'])
+                ->where('start_time', $data['start_time'])
+                ->where('end_time', $data['end_time'])
+                ->exists();
+            if ($existing_data) {
+                return redirect()->with('error', 'Selected time slot already exists');
+            }
+
             $doctorAvailability = new DoctorAvailability();
             $doctorAvailability->doctor_id = $data['id'];
             $doctorAvailability->date = $data['date'];
@@ -162,7 +171,7 @@ class DoctorManagementController extends Controller
         } catch (\Throwable $th) {
             info($th);
             DB::rollBack();
-            return redirect()->route('doctor.availability')->with('error', 'Something went wrong');
+            return redirect()->back()->with('error', 'Something went wrong');
         }
     }
 

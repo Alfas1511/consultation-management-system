@@ -56,10 +56,10 @@
 
                 <div class="container-login100">
                     <div class="wrap-login100 p-6">
-                        <form class="login100-form validate-form" method="POST" action="{{ route('login') }}">
+                        <form class="login100-form validate-form" method="POST" action="{{ route('register') }}">
                             @csrf
                             <span class="login100-form-title pb-5">
-                                Login
+                                Patient Register
                             </span>
 
                             @if (Session::has('success'))
@@ -74,6 +74,15 @@
                                 <div class="panel-body tabs-menu-body p-0 pt-5">
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="tab5">
+                                            <div class="wrap-input100 validate-input input-group"
+                                                data-bs-validate="Name is required">
+                                                <a href="javascript:void(0)"
+                                                    class="input-group-text bg-white text-muted">
+                                                    <i class="zmdi zmdi-email text-muted" aria-hidden="true"></i>
+                                                </a>
+                                                <input class="input100 border-start-0 form-control ms-0" type="text"
+                                                    name="name" placeholder="Patient Name">
+                                            </div>
                                             <div class="wrap-input100 validate-input input-group"
                                                 data-bs-validate="Valid email is required: ex@abc.xyz">
                                                 <a href="javascript:void(0)"
@@ -91,19 +100,15 @@
                                                 <input class="input100 border-start-0 form-control ms-0" type="password"
                                                     placeholder="Password" name="password">
                                             </div>
-                                            {{-- <div class="text-end pt-4">
-                                                <p class="mb-0"><a href="forgot-password.html"
-                                                        class="text-primary ms-1">Forgot Password?</a></p>
-                                            </div> --}}
                                             <div class="container-login100-form-btn">
                                                 <button class="login100-form-btn btn-primary">
-                                                    Login
+                                                    Register
                                                 </button>
                                             </div>
                                             <div class="text-center pt-3">
-                                                <p class="text-dark mb-0">Not a User?<a
-                                                        href="{{ route('registrationPage') }}"
-                                                        class="text-primary ms-1">Register</a></p>
+                                                <p class="text-dark mb-0">Already a User?<a
+                                                        href="{{ route('loginPage') }}"
+                                                        class="text-primary ms-1">Login</a></p>
                                             </div>
                                         </div>
                                     </div>
