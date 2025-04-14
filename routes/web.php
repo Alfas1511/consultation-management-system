@@ -32,6 +32,8 @@ Route::middleware(['auth', 'role:Doctor'])->prefix('/doctor')->group(function ()
     Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
     Route::get('/my-patients', [PatientManagementController::class, 'index'])->name('my_patients.index');
     Route::get('/my-patients-list', [PatientManagementController::class, 'list'])->name('my_patients.list');
+    Route::get('/update-status/{id}', [PatientManagementController::class, 'actionsPage'])->name('patient.updateActionPage');
+    Route::post('/update-status-action', [PatientManagementController::class, 'updateStatus'])->name('patient.update_status');
 });
 
 // Patient-only routes
@@ -43,4 +45,5 @@ Route::middleware(['auth', 'role:Patient'])->prefix('/patient')->group(function 
     Route::post('/store-appointment', [AppointmentManagementController::class, 'store'])->name('appointment.store');
     Route::get('/getDoctorAvailabilityDates', [AppointmentManagementController::class, 'getDoctorAvailabilityDates'])->name('getDoctorAvailabilityDates');
     Route::get('/getDoctorAvailabilityTimeSlots', [AppointmentManagementController::class, 'getDoctorAvailabilityTimeSlots'])->name('getDoctorAvailabilityTimeSlots');
+    Route::post('/update-status', [AppointmentManagementController::class, 'updateStatus'])->name('appointment.update_status');
 });

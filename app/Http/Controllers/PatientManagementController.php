@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\DoctorAvailability;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -23,11 +24,42 @@ class PatientManagementController extends Controller
                 return $data->getPatient->name ?? "--";
             })
             ->addColumn('actions', function ($data) {
-                $btn = '';
-                $btn = '<a class="btn btn-info btn-sm" href="#">Update Status</a>';
-                return $btn;
+                if ($data->status == 'pending') {
+                    $btn = '<a class="btn btn-sm btn-info" href="' . route('patient.updateActionPage', $data->id) . '">Update Status</a>';
+                    return $btn;
+                }
+                return $btn = "";
             })
             ->rawColumns(['patient_name', 'actions'])
             ->make(true);
+    }
+
+    public function actionsPage(string $id)
+    {
+        $appointment = Appointment::find($id);
+        return view('doctor.my_patients.actions', compact('appointment'));
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'status' => 'required|in:pending,completed,cancelled',
+        ]);
+
+        try {
+            $appointment = Appointment::findOrFail($request->appointment_id);
+            $appointment->status = $request->status;
+            $appointment->save();
+
+            $docAvailability = DoctorAvailability::find($appointment->availability_id);
+            $docAvailability->is_available = 1;
+            $docAvailability->save();
+
+            return response()->route('my_patients.index')->with('success', ' Status Updated Successfully');
+        } catch (\Throwable $th) {
+            info($th);
+            return response()->route('my_patients.index')->with('error', ' Something went wrong');
+        }
     }
 }

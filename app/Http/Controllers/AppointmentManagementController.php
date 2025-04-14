@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AppointmentStoreRequest;
 use App\Models\Appointment;
 use App\Models\DoctorAvailability;
 use App\Models\User;
+use DB;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -25,9 +27,17 @@ class AppointmentManagementController extends Controller
                 return $data->getDoctor->name ?? "--";
             })
             ->addColumn('actions', function ($data) {
-                $btn = '';
-                $btn = '<a class="btn btn-info btn-sm" href="#">Update Status</a>';
-                return $btn;
+                if ($data->status == 'pending') {
+                    $btn = '<button class="btn btn-sm btn-warning update-status-btn"
+                                data-id="' . $data->id . '"
+                                data-status="' . $data->status . '"
+                                data-bs-toggle="modal"
+                                data-bs-target="#statusModal">
+                                Update Status
+                        </button>';
+                    return $btn;
+                }
+                return $btn = '';
             })
             ->rawColumns(['doctor_name', 'actions'])
             ->make(true);
@@ -41,7 +51,10 @@ class AppointmentManagementController extends Controller
 
     public function getDoctorAvailabilityDates(Request $request)
     {
-        $doctor_availabilities = DoctorAvailability::where('doctor_id', $request->doctor_id)->get();
+        $doctor_availabilities = DoctorAvailability::where('doctor_id', $request->doctor_id)
+            ->where('is_available', 1)
+            ->distinct('date')
+            ->get();
         return response()->json([
             'status' => true,
             'data' => $doctor_availabilities,
@@ -55,5 +68,53 @@ class AppointmentManagementController extends Controller
             'status' => true,
             'data' => $doctor_availabilities,
         ]);
+    }
+
+    public function store(AppointmentStoreRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+            $data = $request->validated();
+            $appointment = new Appointment();
+            $appointment->doctor_id = $data['doctor'];
+            $appointment->patient_id = auth()->id();
+            $appointment->availability_id = $data['timeslot'];
+            $appointment->appointment_date = $data['date'];
+            $appointment->status = 'pending';
+            $appointment->save();
+
+            $docAvailability = DoctorAvailability::find($appointment->availability_id);
+            $docAvailability->is_available = 0;
+            $docAvailability->save();
+
+            DB::commit();
+            return redirect()->route('my_appointments.index')->with('success', 'Appointment created Successfully');
+        } catch (\Throwable $th) {
+            info($th);
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'status' => 'required|in:pending,completed,cancelled',
+        ]);
+
+        try {
+            $appointment = Appointment::findOrFail($request->appointment_id);
+            $appointment->status = $request->status;
+            $appointment->save();
+
+            $docAvailability = DoctorAvailability::find($appointment->availability_id);
+            $docAvailability->is_available = 1;
+            $docAvailability->save();
+
+            return response()->json(['success' => true, 'message' => 'Status updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

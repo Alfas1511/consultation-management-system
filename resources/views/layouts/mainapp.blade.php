@@ -168,26 +168,33 @@
                                         class="side-menu__icon fe fe-home"></i><span
                                         class="side-menu__label">Dashboard</span></a>
                             </li>
-                            <li class="slide">
-                                <a class="side-menu__item has-link" data-bs-toggle="slide"
-                                    href="{{ route('doctor.index') }}"><i
-                                        class="side-menu__icon fe fe-home"></i><span class="side-menu__label">Doctor
-                                        Management</span></a>
-                            </li>
+                            @if (in_array(auth()->user()->role->id, [1]))
+                                <li class="slide">
+                                    <a class="side-menu__item has-link" data-bs-toggle="slide"
+                                        href="{{ route('doctor.index') }}"><i
+                                            class="side-menu__icon fe fe-home"></i><span
+                                            class="side-menu__label">Doctor
+                                            Management</span></a>
+                                </li>
+                            @endif
 
-                            <li class="slide">
-                                <a class="side-menu__item has-link" data-bs-toggle="slide"
-                                    href="{{ route('my_patients.index') }}"><i
-                                        class="side-menu__icon fe fe-home"></i><span class="side-menu__label">My
-                                        Patients</span></a>
-                            </li>
+                            @if (in_array(auth()->user()->role->id, [1, 2]))
+                                <li class="slide">
+                                    <a class="side-menu__item has-link" data-bs-toggle="slide"
+                                        href="{{ route('my_patients.index') }}"><i
+                                            class="side-menu__icon fe fe-home"></i><span class="side-menu__label">My
+                                            Patients</span></a>
+                                </li>
+                            @endif
 
-                            <li class="slide">
-                                <a class="side-menu__item has-link" data-bs-toggle="slide"
-                                    href="{{ route('my_appointments.index') }}"><i
-                                        class="side-menu__icon fe fe-home"></i><span class="side-menu__label">My
-                                        Appointments</span></a>
-                            </li>
+                            @if (in_array(auth()->user()->role->id, [1, 3]))
+                                <li class="slide">
+                                    <a class="side-menu__item has-link" data-bs-toggle="slide"
+                                        href="{{ route('my_appointments.index') }}"><i
+                                            class="side-menu__icon fe fe-home"></i><span class="side-menu__label">My
+                                            Appointments</span></a>
+                                </li>
+                            @endif
 
                         </ul>
                         <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg"

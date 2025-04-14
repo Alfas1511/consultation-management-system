@@ -21,7 +21,7 @@
 
                                 <div class="col-4">
                                     <label for="date">Select Date<span class="text-danger">*</span></label>
-                                    <input type="date" name="date" class="form-control" />
+                                    <input type="date" name="date" id="dateInput" class="form-control" />
                                 </div>
 
                                 <div class="col-4">
@@ -64,7 +64,8 @@
 @section('script')
     <script>
         $(document).ready(function() {
-
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateInput').setAttribute('min', today);
         });
     </script>
 @endsection

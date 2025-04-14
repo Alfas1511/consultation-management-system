@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->integer('patient_id');
             $table->integer('availability_id');
             $table->date('appointment_date');
-            $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
 
             $table->unique(['availability_id', 'appointment_date']);
