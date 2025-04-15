@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DoctorAvailabilityStoreRequest;
 use App\Http\Requests\DoctorStoreRequest;
 use App\Http\Requests\DoctorUpdateRequest;
+use App\Models\Appointment;
 use App\Models\Department;
 use App\Models\DoctorAvailability;
 use App\Models\DoctorDepartment;
 use App\Models\User;
+use Carbon\Carbon;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
@@ -129,9 +131,11 @@ class DoctorManagementController extends Controller
                 return $time;
             })
             ->addColumn('actions', function ($data) {
-                $btn = '';
-                $btn = '<a class="btn btn-info btn-sm" href="' . route('doctor.availability', $data->id) . '">Doctor Availability</a>';
-                $btn .= '<a class="btn btn-sm btn-dark" href="' . route('doctor.edit', $data->id) . '">Edit</a>';
+                $btn = '<form class="delete-form d-inline" method="POST" action="' . route('doctor.availability.delete', $data->id) . '" onsubmit="return confirm(\'Are you sure?\');">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>';
                 return $btn;
             })
             ->rawColumns(['doctor', 'actions', 'timeslot'])
@@ -162,7 +166,7 @@ class DoctorManagementController extends Controller
             $doctorAvailability = new DoctorAvailability();
             $doctorAvailability->doctor_id = $data['id'];
             $doctorAvailability->date = $data['date'];
-            $doctorAvailability->day = $data['day'];
+            $doctorAvailability->day = Carbon::parse($data['date'])->format('l');
             $doctorAvailability->start_time = $data['start_time'];
             $doctorAvailability->end_time = $data['end_time'];
             $doctorAvailability->save();
@@ -175,5 +179,16 @@ class DoctorManagementController extends Controller
         }
     }
 
-
+    public function doctorAvailabilityDelete(string $id)
+    {
+        $data = DoctorAvailability::find($id);
+        if ($data) {
+            if (Appointment::where('availability_id', $data->id)->exists()) {
+                return redirect()->back()->with('error',  'Unable to delete, Appointment exists for the slot');
+            }
+            $data->delete();
+            return redirect()->back()->with('success', 'Doctor Availability Deleted Successfully');
+        }
+        return redirect()->back()->with('error', 'Something went wrong');
+    }
 }

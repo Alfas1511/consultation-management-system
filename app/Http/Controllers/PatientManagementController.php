@@ -25,6 +25,9 @@ class PatientManagementController extends Controller
             ->addColumn('patient_name', function ($data) {
                 return $data->getPatient->name ?? "--";
             })
+            ->addColumn('for_doctor', function ($data) {
+                return $data->getDoctor->name ?? "--";
+            })
             ->addColumn('timeslot', function ($data) {
                 return $data->getDoctorAvailability->start_time . "-" . $data->getDoctorAvailability->end_time ?? "--";
             })
@@ -35,7 +38,7 @@ class PatientManagementController extends Controller
                 }
                 return $btn = "";
             })
-            ->rawColumns(['patient_name', 'actions', 'timeslot'])
+            ->rawColumns(['patient_name', 'actions', 'timeslot', 'for_doctor'])
             ->make(true);
     }
 

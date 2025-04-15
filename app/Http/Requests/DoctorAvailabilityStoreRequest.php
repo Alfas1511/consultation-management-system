@@ -24,7 +24,7 @@ class DoctorAvailabilityStoreRequest extends FormRequest
         return [
             'id' => 'required',
             'date' => 'required',
-            'day' => 'required',
+            // 'day' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
         ];

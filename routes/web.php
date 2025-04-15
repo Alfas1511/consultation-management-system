@@ -26,6 +26,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
         Route::get('doctor-availablity/{id}', [DoctorManagementController::class, 'doctorAvailablity'])->name('doctor.availability');
         Route::get('doctor-availablity-list', [DoctorManagementController::class, 'doctorAvailablityList'])->name('doctor.availability.list');
         Route::get('doctor-availablity-create/{id}', [DoctorManagementController::class, 'doctorAvailablityCreatePage'])->name('doctor.availability.create');
+        Route::delete('doctor-availablity-delete/{id}', [DoctorManagementController::class, 'doctorAvailabilityDelete'])->name('doctor.availability.delete');
         Route::post('doctor-availablity-store', [DoctorManagementController::class, 'doctorAvailablityStore'])->name('doctor.availability.store');
     });
 });

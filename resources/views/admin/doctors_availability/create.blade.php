@@ -15,7 +15,7 @@
                 @if (Session::has('error'))
                     <p class="alert alert-danger">{{ Session::get('error') }}</p>
                 @endif
-                
+
                 <div class="card">
                     <div class="card-body">
                         <form action="{{ route('doctor.availability.store') }}" method="POST">
@@ -31,9 +31,12 @@
                                 <div class="col-4">
                                     <label for="date">Select Date<span class="text-danger">*</span></label>
                                     <input type="date" name="date" id="dateInput" class="form-control" />
+                                    @error('date')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
-                                <div class="col-4">
+                                {{-- <div class="col-4">
                                     <label for="day">Select Day<span class="text-danger">*</span></label>
                                     <select name="day" id="day" class="form-select">
                                         <option value="">All</option>
@@ -45,17 +48,23 @@
                                         <option value="Friday">Friday</option>
                                         <option value="Saturday">Saturday</option>
                                     </select>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-4">
                                     <label for="start_time">Start Time<span class="text-danger">*</span></label>
                                     <input type="time" name="start_time" class="form-control" />
+                                    @error('start_time')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
 
                                 <div class="col-4">
                                     <label for="end_time">End Time<span class="text-danger">*</span></label>
                                     <input type="time" name="end_time" class="form-control" />
+                                    @error('end_time')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                             </div>

@@ -141,7 +141,7 @@
                 <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
                 <div class="app-sidebar">
                     <div class="side-header">
-                        <a class="header-brand1" href="{{ route('admin.dashboard') }}">
+                        <a class="header-brand1" href="#">
                             <img src="{{ asset('assets/images/brand/logo-white.png') }}"
                                 class="header-brand-img desktop-logo" alt="logo">
                             <img src="{{ asset('assets/images/brand/icon-white.png') }}"
@@ -164,7 +164,9 @@
                             </li>
                             <li class="slide">
                                 <a class="side-menu__item has-link" data-bs-toggle="slide"
-                                    href="{{ route('admin.dashboard') }}"><i
+                                    href="@if (auth()->user()->role->id == 1) {{ route('admin.dashboard') }} @endif
+                                    @if (auth()->user()->role->id == 2) {{ route('doctor.dashboard') }} @endif
+                                    @if (auth()->user()->role->id == 3) {{ route('patient.dashboard') }} @endif"><i
                                         class="side-menu__icon fe fe-home"></i><span
                                         class="side-menu__label">Dashboard</span></a>
                             </li>

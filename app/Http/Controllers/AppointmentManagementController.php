@@ -6,6 +6,7 @@ use App\Http\Requests\AppointmentStoreRequest;
 use App\Models\Appointment;
 use App\Models\DoctorAvailability;
 use App\Models\User;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -26,7 +27,7 @@ class AppointmentManagementController extends Controller
         return DataTables::of($datas)
             ->addIndexColumn()
             ->addColumn('doctor_name', function ($data) {
-                return $data->getDoctor->name ?? "--";
+                return $data->getDoctor->name . " (" . $data->getDoctor->getDepartment->getDepartment->name . ")" ?? "--";
             })
             ->addColumn('timeslot', function ($data) {
                 return $data->getDoctorAvailability->start_time . "-" . $data->getDoctorAvailability->end_time ?? "--";
@@ -58,7 +59,7 @@ class AppointmentManagementController extends Controller
     {
         $doctor_availabilities = DoctorAvailability::where('doctor_id', $request->doctor_id)
             ->where('is_available', 1)
-            ->select('date')
+            ->select('date', 'day')
             ->distinct()
             ->get();
         return response()->json([

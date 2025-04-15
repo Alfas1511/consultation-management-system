@@ -29,6 +29,9 @@
                                             <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                                         @endforeach
                                     </select>
+                                    @error('doctor')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="col-4">
@@ -36,6 +39,9 @@
                                     <select name="date" id="date" class="form-select">
                                         <option value="">Select</option>
                                     </select>
+                                    @error('date')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="col-4">
@@ -43,6 +49,9 @@
                                     <select name="timeslot" id="timeslot" class="form-select">
                                         <option value="">Select</option>
                                     </select>
+                                    @error('timeslot')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                             </div>
@@ -76,7 +85,7 @@
                             if (response.status && response.data.length > 0) {
                                 response.data.forEach(item => {
                                     $('#date').append(
-                                        `<option value="${item.date}">${item.date}</option>`
+                                        `<option value="${item.date}">${item.date}(${item.day})</option>`
                                     );
                                 });
                             } else {
@@ -117,7 +126,7 @@
                         },
                         error: function() {
                             $('#timeslot').html(
-                            '<option value="">Error loading slots</option>');
+                                '<option value="">Error loading slots</option>');
                         }
                     });
                 }

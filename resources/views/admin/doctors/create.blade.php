@@ -15,11 +15,9 @@
                                 <div class="col-4">
                                     <label for="name">Doctor Name<span class="text-danger">*</span></label>
                                     <input type="text" name="name" class="form-control" placeholder="Doctor Name" />
-                                </div>
-
-                                <div class="col-4">
-                                    <label for="email">Doctor Email<span class="text-danger">*</span></label>
-                                    <input type="email" name="email" class="form-control" placeholder="Doctor Email" />
+                                    @error('name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="col-4">
@@ -30,12 +28,27 @@
                                             <option value="{{ $department->id }}">{{ $department->name }}</option>
                                         @endforeach
                                     </select>
+                                    @error('department')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
+                                <div class="col-4">
+                                    <label for="email">Doctor Email<span class="text-danger">*</span></label>
+                                    <input type="email" name="email" class="form-control" placeholder="Doctor Email" />
+                                    @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
 
                                 <div class="col-4">
                                     <label for="password">Password<span class="text-danger">*</span></label>
                                     <input type="password" name="password" class="form-control" placeholder="Password" />
                                 </div>
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="col-6 mt-2">

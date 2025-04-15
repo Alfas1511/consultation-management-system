@@ -22,6 +22,7 @@
                             <thead>
                                 <th width=7%>SI No</th>
                                 <th>Patient Name</th>
+                                <th>For Doctor</th>
                                 <th>Appointment Date</th>
                                 <th>Time Slot</th>
                                 <th>Status</th>
@@ -62,6 +63,10 @@
                     {
                         data: 'patient_name',
                         name: 'patient_name',
+                    },
+                    {
+                        data: 'for_doctor',
+                        name: 'for_doctor',
                     },
                     {
                         data: 'appointment_date',
