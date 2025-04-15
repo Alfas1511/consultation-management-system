@@ -64,10 +64,10 @@ class PatientManagementController extends Controller
             $docAvailability->is_available = 1;
             $docAvailability->save();
 
-            return response()->route('my_patients.index')->with('success', ' Status Updated Successfully');
+            return redirect()->route('my_patients.index')->with('success', ' Status Updated Successfully');
         } catch (\Throwable $th) {
             info($th);
-            return response()->route('my_patients.index')->with('error', ' Something went wrong');
+            return redirect()->route('my_patients.index')->with('error', ' Something went wrong');
         }
     }
 }
