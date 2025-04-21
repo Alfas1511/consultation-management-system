@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class AppointmentManagementController extends Controller
@@ -83,6 +84,21 @@ class AppointmentManagementController extends Controller
         try {
             DB::beginTransaction();
             $data = $request->validated();
+
+            $timeslotData = DoctorAvailability::find($data['timeslot']);
+            $date = $timeslotData->date;
+            $start_time = $timeslotData->start_time;
+            $end_time = $timeslotData->end_time;
+
+            $existing_appointments = Appointment::where('patient_id',  Auth::id())
+                ->get();
+
+            foreach ($existing_appointments as $ea) {
+                if ($ea->getDoctorAvailability->date == $date && $ea->getDoctorAvailability->start_time == $start_time && $ea->getDoctorAvailability->end_time == $end_time) {
+                    return 'There Exists an appointment for the timeslot';
+                }
+            }
+
             $appointment = new Appointment();
             $appointment->doctor_id = $data['doctor'];
             $appointment->patient_id = auth()->id();
