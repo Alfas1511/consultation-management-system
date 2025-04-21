@@ -95,7 +95,8 @@ class AppointmentManagementController extends Controller
 
             foreach ($existing_appointments as $ea) {
                 if ($ea->getDoctorAvailability->date == $date && $ea->getDoctorAvailability->start_time == $start_time && $ea->getDoctorAvailability->end_time == $end_time) {
-                    return 'There Exists an appointment for the timeslot';
+                    DB::commit();
+                    return redirect()->route('my_appointments.index')->with('error', 'There Exists an appointment for the timeslot');
                 }
             }
 
